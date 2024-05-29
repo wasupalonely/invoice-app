@@ -7,6 +7,7 @@ import ItemsListView from "./components/ItemsListView";
 import TotalView from "./components/TotalView";
 import ItemsFormModal from "./components/ItemsFormModal";
 import GenericButton from "./components/GenericButton";
+import { fetchApiData } from "./api/apiCall";
 
 const initialInvoice = {
   id: 0,
@@ -39,6 +40,22 @@ export const InvoiceApp = () => {
 
   const { id, name, company, client } = invoice;
   const [items, setItems] = useState([]);
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchApiData();
+        console.log("REsult --> ", result);
+        setData(result);
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const data = getInvoice();
